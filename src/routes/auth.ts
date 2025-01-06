@@ -7,14 +7,16 @@ import {
   fa_reset,
   fa_verfiy,
 } from "../controllers/auth.controller";
+import passport from "passport";
+import { protectedMiddleware } from "../middleware/protected";
 
 const router: Router = Router();
 
-router.get("/sign-up", signUp);
-router.post("/login", login);
+router.post("/sign-up", signUp);
+router.post("/login", passport.authenticate("local"), login);
 router.post("/logout", logout);
-router.post("/2fa/setup", fa_Setup);
-router.post("/2fa/verify", fa_verfiy);
-router.post("/2fa/reset", fa_reset);
+router.post("/2fa/setup", protectedMiddleware, fa_Setup);
+router.post("/2fa/verify", protectedMiddleware, fa_verfiy);
+router.post("/2fa/reset", protectedMiddleware, fa_reset);
 
 export default router;
